@@ -2,6 +2,7 @@ package dev.coder.security.auth;
 
 import dev.coder.security.dtos.AuthenticateRequest;
 import dev.coder.security.dtos.RegisterRequest;
+import dev.coder.security.payload.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
+        var token = authService.register(request);
         return ResponseEntity.ok(authService.register(request));
     }
 

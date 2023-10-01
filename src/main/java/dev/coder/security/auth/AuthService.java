@@ -3,6 +3,7 @@ package dev.coder.security.auth;
 import dev.coder.security.config.JwtService;
 import dev.coder.security.dtos.AuthenticateRequest;
 import dev.coder.security.dtos.RegisterRequest;
+import dev.coder.security.payload.ApiResponse;
 import dev.coder.security.user.Role;
 import dev.coder.security.user.User;
 import dev.coder.security.user.UserRepository;
@@ -20,7 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private  final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
+    public ApiResponse register(RegisterRequest registerRequest) {
         var user = User.builder()
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
@@ -30,7 +31,11 @@ public class AuthService {
                 .build();
         userRepository.save(user);
         var token = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+
+        return ApiResponse.builder()
+                .success(true)
+                .message("Registered successfully")
+                .data(user)
                 .token(token)
                 .build();
     }
